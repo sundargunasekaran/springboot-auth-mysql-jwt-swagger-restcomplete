@@ -52,6 +52,7 @@ public class JWTUtils {
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
+        //String role = (String) claims.get("role");
         return claimsResolver.apply(claims);
     }
     private Claims extractAllClaims(String token) {
@@ -64,6 +65,8 @@ public class JWTUtils {
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>(); // <role,list<authorities>
+      //  claims.put("role", "role");
+      //  claims.put("password", "password");
         return createToken(claims, username);
     }
 

@@ -66,17 +66,17 @@ public class TestController {
 			@ApiResponse(code = 200, message = "Successful retrieval") })
 	@RequestMapping(method = RequestMethod.POST, value = "/signin", headers = "Accept= application/json", produces = "application/json")
 	public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationModel model) throws Exception {
-		System.out.println("--->login");		
+		String jwt = "";	
 		try {
 			Authentication authentication = authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(model.getUsername(), model.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+			//jwt = jwtUtils.generateTokenWithClaims(model.getUsername(),model.getPassword(), authentication.getAuthorities().toString().replaceAll("\\[|\\]", "").replaceAll(", ","\t"));
+			jwt = jwtUtils.generateToken(model.getUsername());
 		}
 		catch (BadCredentialsException e) {
 			throw new Exception("Incorrect username or password", e);
 		}
-
-		final String jwt = jwtUtils.generateToken(model.getUsername());
 		return ResponseEntity.ok(jwt);
 	}
 

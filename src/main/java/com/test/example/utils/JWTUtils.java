@@ -52,6 +52,8 @@ public class JWTUtils {
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
+        //System.out.println("role "+(String) claims.get("role"));
+       // System.out.println("pwd "+(String) claims.get("password"));
         //String role = (String) claims.get("role");
         return claimsResolver.apply(claims);
     }
@@ -65,8 +67,17 @@ public class JWTUtils {
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>(); // <role,list<authorities>
-      //  claims.put("role", "role");
-      //  claims.put("password", "password");
+        return createToken(claims, username);
+    }
+    
+    public String generateTokenWithClaims(String username,String password,String roles) {
+        Map<String, Object> claims = new HashMap<>(); // <role,list<authorities>
+        if(claims.size() > 0 && claims.get("role") != null){
+        	 claims.put("role", roles);
+        }
+        if(claims.size() > 0 && claims.get("password") != null){
+        	claims.put("password", password);
+       }        
         return createToken(claims, username);
     }
 
